@@ -119,7 +119,6 @@ class HBNBCommand(cmd.Cmd):
             if not args:
                 raise SyntaxError()
             arg_list = args.split(" ")
-            # Kwargs = keyword argument
             kwargs = {}
             for arg in arg_list[1:]:
                 arg_splited = arg.split("=")
@@ -132,7 +131,7 @@ class HBNBCommand(cmd.Cmd):
         except NameError:
             print("** class doesn't exist **")
         new_instance = HBNBCommand.classes[arg_list[0]](**kwargs)
-        new_instance.save()  # save to storage
+        new_instance.save()
         print(new_instance.id)
 
     def help_create(self):
