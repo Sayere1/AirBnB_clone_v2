@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""This module define a class to manage file storage for AirBnB clone"""
+"""This module defines a class to manage file storage for hbnb clone"""
 import json
 from models.base_model import BaseModel
 from models.user import User
@@ -8,63 +8,67 @@ from models.city import City
 from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
-import shlex
 
 
 class FileStorage:
-    """This class serializes instances to a JSON file and
-    deserializes JSON file to instances
-    Attributes: __file_path: JSON file path % __objects: stored object
-    """
-    __file_path = "file.json"
+    """This class manages storage of hbnb models in JSON format"""
+    __file_path = 'file.json'
     __objects = {}
 
+    __classes = {
+                    'BaseModel': BaseModel, 'User': User, 'Place': Place,
+                    'State': State, 'City': City, 'Amenity': Amenity,
+                    'Review': Review
+                  }
+
     def all(self, cls=None):
-        """Return:__object dictionary"""
-        dic = {}
-        if cls:
-            dictionary = self.__objects
-            for key in dictionary:
-                partition = key.replace('.', ' ')
-                partition = shlex.split(partition)
-                if (partition[0] == cls.__name__):
-                    dic[key] = self.__objects[key]
-            return (dic)
+        """Returns a dictionary of models currently in storage
+        return: Dictionary
+        """
+        if cls is not None:
+            _dict = {}
+            for k, v in self.__objects.items():
+                if cls == v.__class__ or cls == v.__class__.__name__:
+                    _dict[k] = v
+            return _dict
         else:
             return self.__objects
 
     def new(self, obj):
-        """sets __object to given obj, Args: obj: given object"""
-        if obj:
-            key = "{}.{}".format(type(obj).__name__, obj.id)
-            self.__objects[key] = obj
+        """Adds new object to storage dictionary"""
+        self.all().update({obj.to_dict()['__class__'] + '.' + obj.id: obj})
 
     def save(self):
-        """serialize the file path to JSON file path
-        """
-        my_dict = {}
-        for key, value in self.__objects.items():
-            my_dict[key] = value.to_dict()
-        with open(self.__file_path, 'w', encoding="UTF-8") as f:
-            json.dump(my_dict, f)
+        """Saves storage dictionary to file"""
+        with open(FileStorage.__file_path, 'w') as f:
+            temp = {}
+            temp.update(FileStorage.__objects)
+            for key, val in temp.items():
+                temp[key] = val.to_dict()
+            json.dump(temp, f)
 
     def reload(self):
-        """serialize the file path to JSON file path
-        """
+        """Loads storage dictionary from file"""
+
         try:
-            with open(self.__file_path, 'r', encoding="UTF-8") as f:
-                for key, value in (json.load(f)).items():
-                    value = eval(value["__class__"])(**value)
-                    self.__objects[key] = value
+            temp = {}
+            with open(FileStorage.__file_path, 'r') as f:
+                temp = json.load(f)
+                for key, val in temp.items():
+                    self.all()[key] \
+                            = FileStorage.__classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
 
     def delete(self, obj=None):
-        """ delete an existing element"""
-        if obj:
-            key = "{}.{}".format(type(obj).__name__, obj.id)
-            del self.__objects[key]
+        """delete obj from __objects if it’s inside"""
+        if obj is not None:
+            key = obj.__class__.__name__ + '.' + obj.id
+            if key in self.__objects:
+                del self.__objects[key]
 
     def close(self):
-        """ calls reload()"""
+        """deserializing the JSON file to objects
+        Call reload()
+        """
         self.reload()
