@@ -132,7 +132,7 @@ class HBNBCommand(cmd.Cmd):
         except NameError:
             print("** class doesn't exist **")
         new_instance = HBNBCommand.classes[arg_list[0]](**kwargs)
-        new_instance.save() # save to storage
+        new_instance.save()  # save to storage
         print(new_instance.id)
 
     def help_create(self):
