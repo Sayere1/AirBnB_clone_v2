@@ -145,7 +145,8 @@ class HBNBCommand(cmd.Cmd):
                     if int_value is not None:
                         obj_kwargs[key_name] = int(int_value)
                     if str_value is not None:
-                        obj_kwargs[key_name] = str_value[1:-1].replace('_', ' ')
+                        obj_kwargs[key_name] = str_value[1:-1]\
+                         .replace('_', ' ')
         else:
             class_name = args
         if not class_name:
