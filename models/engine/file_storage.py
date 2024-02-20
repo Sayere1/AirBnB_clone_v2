@@ -58,4 +58,5 @@ class FileStorage:
 
     def delete(self, obj=None):
         if obj:
-            del FileStorage.__objects[f"{type(obj).__name__}.{obj.id}"]
+            # del FileStorage.__objects[f"{type(obj).__name__}.{obj.id}"]
+            FileStorage.__objects.pop(f"{type(obj).__name__}.{obj.id}")
