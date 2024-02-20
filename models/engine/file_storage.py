@@ -60,4 +60,3 @@ class FileStorage:
         """Delete Object from _objects dictionary"""
         if obj:
             del FileStorage.__objects[f"{type(obj).__name__}.{obj.id}"]
-            # FileStorage.__objects.pop(f"{type(obj).__name__}.{obj.id}")
