@@ -19,7 +19,7 @@ classes = {
     # "Place": Place,
     # "Review": Review,
     "State": State,
-    # "User": User
+    "User": User
     }
 
 
