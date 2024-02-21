@@ -12,8 +12,8 @@ time_fmt = "%Y-%m-%dT%H:%M:%S.%f"
 
 if getenv("HBNB_TYPE_STORAGE") == 'db':
     Base = declarative_base()
-# else:
-#     Base = object
+else:
+    Base = object
 
 
 class BaseModel:
@@ -47,11 +47,16 @@ class BaseModel:
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
         else:
+            # kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
+            #                                             '%Y-%m-%dT%H:%M:%S.%f')
+            # kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
+            #                                             '%Y-%m-%dT%H:%M:%S.%f')
             kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
-                                                        '%Y-%m-%dT%H:%M:%S.%f')
+                                                        '%Y-%m-%d %H:%M:%S.%f')
             kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
-                                                        '%Y-%m-%dT%H:%M:%S.%f')
-            del kwargs['__class__']
+                                                        '%Y-%m-%d %H:%M:%S.%f')
+            if '__class__' in kwargs.keys():
+                del kwargs['__class__']
             for i, j in kwargs.items():
                 if i not in ['id', 'created_at', 'updated_at']:
                     self.__setattr__(i, j)
@@ -61,7 +66,7 @@ class BaseModel:
     def __str__(self):
         """return String representation of the BaseModel class"""
         return "[{:s}] ({:s}) {}".format(self.__class__.__name__, self.id,
-                                         self.__dict__)
+                                         self.to_dict())
 
     def save(self):
         """updates 'updated_at' with current time when instance is changed"""
