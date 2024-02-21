@@ -47,14 +47,14 @@ class BaseModel:
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
         else:
-            # kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
-            #                                             '%Y-%m-%dT%H:%M:%S.%f')
-            # kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
-            #                                             '%Y-%m-%dT%H:%M:%S.%f')
             kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
-                                                        '%Y-%m-%d %H:%M:%S.%f')
+                                                        '%Y-%m-%dT%H:%M:%S.%f')
             kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
-                                                        '%Y-%m-%d %H:%M:%S.%f')
+                                                        '%Y-%m-%dT%H:%M:%S.%f')
+            # kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
+            #                                             '%Y-%m-%d %H:%M:%S.%f')
+            # kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
+            #                                             '%Y-%m-%d %H:%M:%S.%f')
             if '__class__' in kwargs.keys():
                 del kwargs['__class__']
             for i, j in kwargs.items():
@@ -65,8 +65,14 @@ class BaseModel:
 
     def __str__(self):
         """return String representation of the BaseModel class"""
+        # return "[{:s}] ({:s}) {}".format(self.__class__.__name__, self.id,
+        #                                  self.to_dict())
+        # return "[{:s}] ({:s}) {}".format(self.__class__.__name__, self.id,
+        #                                  self.__dict__)
+        dict = self.__dict__
+        del dict['_sa_instance_state']
         return "[{:s}] ({:s}) {}".format(self.__class__.__name__, self.id,
-                                         self.to_dict())
+                                         dict)
 
     def save(self):
         """updates 'updated_at' with current time when instance is changed"""

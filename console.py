@@ -259,7 +259,6 @@ class HBNBCommand(cmd.Cmd):
         for i in alll.keys():
             print_list.append(str(alll[i]))
         print(print_list)
-        exit()
 
     def help_all(self):
         """ Help information for the all command """

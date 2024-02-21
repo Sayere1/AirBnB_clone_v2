@@ -13,8 +13,14 @@ import sqlalchemy
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
-classes = {"Amenity": Amenity, "City": City,
-           "Place": Place, "Review": Review, "State": State, "User": User}
+classes = {
+    # "Amenity": Amenity,
+    "City": City,
+    # "Place": Place,
+    # "Review": Review,
+    "State": State,
+    # "User": User
+    }
 
 
 class DBStorage():
@@ -36,25 +42,6 @@ class DBStorage():
                                              HBNB_MYSQL_DB), pool_pre_ping=True)
         if HBNB_ENV == "test":
             Base.metadata.drop_all(self.__engine)
-
-    # def all(self, cls=None):
-    #     """Returns dictionary with all objects depending
-    #     of the class name (argument cls)"""
-    #     if cls:
-    #         objs = self.__session.query(classes[cls])
-    #     else:
-    #         objs = self.__session.query(State).all()
-    #         objs += self.__session.query(City).all()
-    #         objs += self.__session.query(User).all()
-    #         objs += self.__session.query(Place).all()
-    #         objs += self.__session.query(Amenity).all()
-    #         objs += self.__session.query(Review).all()
-
-    #     a_dict = {}
-    #     for obj in objs:
-    #         k = '{}.{}'.format(type(obj).__name__, obj.id)
-    #         a_dict[k] = obj
-    #     return a_dict
 
     def all(self, cls=None):
         """Returns dictionary with all objects depending
