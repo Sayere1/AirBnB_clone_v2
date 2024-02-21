@@ -14,8 +14,10 @@ class FileStorage:
             return FileStorage.__objects
         else:
             new_objs = {}
+            # for i in FileStorage.__objects.keys():
+            #     if type(cls)
             for i, j in FileStorage.__objects.items():
-                if f"{cls.__name__}." in i:
+                if f"{cls}." in i:
                     new_objs[i] = j
             return new_objs
 

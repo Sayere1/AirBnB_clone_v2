@@ -13,8 +13,14 @@ import sqlalchemy
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
-classes = {"Amenity": Amenity, "City": City,
-           "Place": Place, "Review": Review, "State": State, "User": User}
+classes = {
+    # "Amenity": Amenity,
+    "City": City,
+    # "Place": Place,
+    # "Review": Review,
+    "State": State,
+    "User": User
+    }
 
 
 class DBStorage():
@@ -33,28 +39,26 @@ class DBStorage():
                                       format(HBNB_MYSQL_USER,
                                              HBNB_MYSQL_PWD,
                                              HBNB_MYSQL_HOST,
-                                             HBNB_MYSQL_DB))
+                                             HBNB_MYSQL_DB), pool_pre_ping=True)
         if HBNB_ENV == "test":
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
         """Returns dictionary with all objects depending
         of the class name (argument cls)"""
-        if cls:
-            objs = self.__session.query(classes[cls])
+        ret = {}
+        if cls is not None:
+            if type(cls) is str:
+                cls = classes[cls]
+            inst = self.__session.query(cls).all()
+            for i in inst:
+                ret[f'{type(i).__name__}.{i.id}'] = i
         else:
-            objs = self.__session.query(State).all()
-            objs += self.__session.query(City).all()
-            objs += self.__session.query(User).all()
-            objs += self.__session.query(Place).all()
-            objs += self.__session.query(Amenity).all()
-            objs += self.__session.query(Review).all()
-
-        a_dict = {}
-        for obj in objs:
-            k = '{}.{}'.format(type(obj).__name__, obj.id)
-            a_dict[k] = obj
-        return a_dict
+            for i, j in classes.items():
+                inst = self.__session.query(j).all()
+                for k in inst:
+                    ret[f'{type(k).__name__}.{k.id}'] = k
+        return ret
 
     def new(self, obj):
         """add the object to the current database session"""
@@ -74,7 +78,7 @@ class DBStorage():
         Base.metadata.create_all(self.__engine)
         sess_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(sess_factory)
-        self.__session = Session
+        self.__session = Session()
 
     def close(self):
         """call remove()"""
