@@ -7,6 +7,7 @@ import sqlalchemy
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 from sqlalchemy import ForeignKey
+from models.place import Place
 
 class City(BaseModel, Base):
     """represents a column containing a string """
