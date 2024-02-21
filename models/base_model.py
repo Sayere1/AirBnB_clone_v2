@@ -24,8 +24,8 @@ class BaseModel:
     #     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
     #     updated_at = Column(DateTime, nullable=False, default=datetime.utcnow)
     id = Column(String(60), nullable=False, primary_key=True)
-    created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
-    updated_at = Column(DateTime, nullable=False, default=datetime.utcnow)
+    created_at = Column(DateTime, nullable=False, default=datetime.now())
+    updated_at = Column(DateTime, nullable=False, default=datetime.now())
 
     # def __init__(self, *args, **kwargs):
     #     """base model initialized"""
@@ -47,14 +47,14 @@ class BaseModel:
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
         else:
-            kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
-                                                        '%Y-%m-%dT%H:%M:%S.%f')
-            kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
-                                                        '%Y-%m-%dT%H:%M:%S.%f')
             # kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
-            #                                             '%Y-%m-%d %H:%M:%S.%f')
+            #                                             '%Y-%m-%dT%H:%M:%S.%f')
             # kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
-            #                                             '%Y-%m-%d %H:%M:%S.%f')
+            #                                             '%Y-%m-%dT%H:%M:%S.%f')
+            kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
+                                                        '%Y-%m-%d %H:%M:%S.%f')
+            kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
+                                                        '%Y-%m-%d %H:%M:%S.%f')
             if '__class__' in kwargs.keys():
                 del kwargs['__class__']
             for i, j in kwargs.items():
@@ -70,7 +70,8 @@ class BaseModel:
         # return "[{:s}] ({:s}) {}".format(self.__class__.__name__, self.id,
         #                                  self.__dict__)
         dict = self.__dict__
-        del dict['_sa_instance_state']
+        if '_sa_instance_state' in dict.keys():
+            del dict['_sa_instance_state']
         return "[{:s}] ({:s}) {}".format(self.__class__.__name__, self.id,
                                          dict)
 
