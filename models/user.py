@@ -20,6 +20,7 @@ class User(BaseModel, Base):
         email = Column(String(128), nullable=False)
         password = Column(String(128), nullable=False)
         places = relationship('Place', backref='user', cascade='all, delete')
+        reviews = relationship('Review', backref='user', cascade='all, delete')
 
     def __init__(self, *args, **kwargs):
         """initializes city"""
