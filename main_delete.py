@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """ Test delete feature
 """
+import os
 from models.engine.file_storage import FileStorage
 from models.state import State
 
@@ -21,6 +22,7 @@ print("New State: {}".format(new_state))
 
 # All States
 all_states = fs.all(State)
+print(all_states)
 print("All States: {}".format(len(all_states.keys())))
 for state_key in all_states.keys():
     print(all_states[state_key])
@@ -34,6 +36,7 @@ print("Another State: {}".format(another_state))
 
 # All States
 all_states = fs.all(State)
+print(all_states)
 print("All States: {}".format(len(all_states.keys())))
 for state_key in all_states.keys():
     print(all_states[state_key])
@@ -43,6 +46,8 @@ fs.delete(new_state)
 
 # All States
 all_states = fs.all(State)
+print(all_states)
 print("All States: {}".format(len(all_states.keys())))
 for state_key in all_states.keys():
     print(all_states[state_key])
+os.remove('file.json')
