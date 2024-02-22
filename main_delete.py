@@ -1,52 +1,41 @@
 #!/usr/bin/python3
-""" Test delete feature
+""" Test
 """
-import os
 from models.engine.file_storage import FileStorage
 from models.state import State
+import os
+
+
+if os.path.exists(FileStorage._FileStorage__file_path):
+    os.remove(FileStorage._FileStorage__file_path)
+
 
 fs = FileStorage()
-
-# All States
-all_states = fs.all(State)
-print("All States: {}".format(len(all_states.keys())))
-for state_key in all_states.keys():
-    print(all_states[state_key])
 
 # Create a new State
 new_state = State()
 new_state.name = "California"
 fs.new(new_state)
 fs.save()
-print("New State: {}".format(new_state))
+key_search = "{}.{}".format("State", new_state.id)
 
-# All States
-all_states = fs.all(State)
-print("All States: {}".format(len(all_states.keys())))
-for state_key in all_states.keys():
-    print(all_states[state_key])
-
-# Create another State
-another_state = State()
-another_state.name = "Nevada"
-fs.new(another_state)
-fs.save()
-print("Another State: {}".format(another_state))
-
-# All States
-all_states = fs.all(State)
-print("All States: {}".format(len(all_states.keys())))
-for state_key in all_states.keys():
-    print(all_states[state_key])
-
-# Delete the new State
-# fs.delete(new_state)
+# Delete nothing
 fs.delete(None)
 
-# # All States
-# all_states = fs.all(State)
-# print(all_states)
-# print("All States: {}".format(len(all_states.keys())))
-# for state_key in all_states.keys():
-#     print(all_states[state_key])
-# os.remove('file.json')
+
+# All States
+all_objs = fs.all()
+try:
+    all_objs.update(fs.all(State))
+except:
+    pass
+try:
+    all_objs.update(fs.all("State"))
+except:
+    pass
+
+if all_objs.get(key_search) is None:
+    print("State created just before delete should not be deleted if delete has been called without object")
+    exit(1)
+
+print("OK", end="")
