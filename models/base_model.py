@@ -47,13 +47,15 @@ class BaseModel:
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
         else:
-            # kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
-            #                                             '%Y-%m-%dT%H:%M:%S.%f')
-            # kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
-            #                                             '%Y-%m-%dT%H:%M:%S.%f')
-            kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
-                                                        '%Y-%m-%d %H:%M:%S.%f')
-            kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
+            if getenv('HBNB_TYPE_STORAGE') != 'db':
+                kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
+                                                            '%Y-%m-%dT%H:%M:%S.%f')
+                kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
+                                                        '%Y-%m-%dT%H:%M:%S.%f')
+            else:
+                kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
+                                                            '%Y-%m-%d %H:%M:%S.%f')
+                kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
                                                         '%Y-%m-%d %H:%M:%S.%f')
             if '__class__' in kwargs.keys():
                 del kwargs['__class__']

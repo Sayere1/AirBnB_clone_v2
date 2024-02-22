@@ -22,7 +22,6 @@ print("New State: {}".format(new_state))
 
 # All States
 all_states = fs.all(State)
-print(all_states)
 print("All States: {}".format(len(all_states.keys())))
 for state_key in all_states.keys():
     print(all_states[state_key])
@@ -36,18 +35,18 @@ print("Another State: {}".format(another_state))
 
 # All States
 all_states = fs.all(State)
-print(all_states)
 print("All States: {}".format(len(all_states.keys())))
 for state_key in all_states.keys():
     print(all_states[state_key])
 
 # Delete the new State
-fs.delete(new_state)
+# fs.delete(new_state)
+fs.delete(None)
 
-# All States
-all_states = fs.all(State)
-print(all_states)
-print("All States: {}".format(len(all_states.keys())))
-for state_key in all_states.keys():
-    print(all_states[state_key])
-os.remove('file.json')
+# # All States
+# all_states = fs.all(State)
+# print(all_states)
+# print("All States: {}".format(len(all_states.keys())))
+# for state_key in all_states.keys():
+#     print(all_states[state_key])
+# os.remove('file.json')
