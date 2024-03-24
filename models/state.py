@@ -1,35 +1,35 @@
 #!/usr/bin/python3
-""" State Module for HBNB project """
-import models
+"""This is the state class"""
+from sqlalchemy.ext.declarative import declarative_base
 from models.base_model import BaseModel, Base
-from os import getenv
-import sqlalchemy
-from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, String
+import models
+from models.city import City
+import shlex
 
 
 class State(BaseModel, Base):
-    """state inherits from Bm and Base will be rep in column containing a string """
-    if getenv('HBNB_TYPE_STORAGE') == 'db':
-        __tablename__ = 'states'
-        name = Column(String(128), nullable=False)
-        id = Column(String(60), nullable=False, primary_key=True)
-        # cities = relationship("City", cascade="all, delete", backref="states")
-        cities = relationship("City", cascade="all, delete", backref="state")
-        # cities = relationship("City", cascade="all, delete-orphan", backref="state")
-    else:
-        name = ""
+    """This is the class for State
+    Attributes:
+        name: input name
+    """
+    __tablename__ = "states"
+    name = Column(String(128), nullable=False)
+    cities = relationship("City", cascade='all, delete, delete-orphan',
+                          backref="state")
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-    if getenv('HBNB_TYPE_STORAGE') != 'db':
-        @property
-        def cities(self):
-            """returns City instances"""
-            values_city = models.storage.all("City").values()
-            list_city = []
-            for city in values_city:
-                if city.state_id == self.id:
-                    list_city.append(city)
-            return list_city
+    @property
+    def cities(self):
+        var = models.storage.all()
+        lista = []
+        result = []
+        for key in var:
+            city = key.replace('.', ' ')
+            city = shlex.split(city)
+            if (city[0] == 'City'):
+                lista.append(var[key])
+        for elem in lista:
+            if (elem.state_id == self.id):
+                result.append(elem)
+        return (result)
