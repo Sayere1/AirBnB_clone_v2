@@ -1,25 +1,30 @@
 #!/usr/bin/python3
-# script that starts a Flask web application
+"""Script that starts a Flask web application.
+App listens on 0.0.0.0, port 5000. Routes:
+    /: Return 'Hello HBNB!'. /hbnb: Return 'HBNB'.
+    /c/<text>: Return 'C' then <text>.
+"""
 from flask import Flask
-
 app = Flask(__name__)
 
+
 @app.route("/", strict_slashes=False)
-def hello():
-    """return hello NMBB"""
+def hello_hbnb():
+    """Return 'Hello HBNB!'."""
     return "Hello HBNB!"
+
 
 @app.route("/hbnb", strict_slashes=False)
 def hbnb():
-    """return hbnb"""
+    """Return 'HBNB'."""
     return "HBNB"
 
-@app.route("/c/<string:text>", strict_slashes=False)
-def c_is_fun(text):
-    """Configure C is Fun"""
-    text = text.replace('_', ' ')
-    value = 'C {}'.format(text)
-    return value
+
+@app.route("/c/<text>", strict_slashes=False)
+def c(text):
+    """Return 'C' then <text>."""
+    text = text.replace("_", " ")
+    return "C {}".format(text)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
